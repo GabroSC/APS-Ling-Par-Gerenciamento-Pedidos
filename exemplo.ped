@@ -1,0 +1,19 @@
+criar_pedido(123, 'João Silva', '2025-09-18');
+
+adicionar_item(123, 'item001', 3);
+
+adicionar_item(123, 'item002', 2);
+
+while consultar_pedido(123, "status") == 'aberto' {
+
+    adicionar_item(123, 'item003', 1);
+    
+    resposta = deseja_adicionar_mais_itens('sim');
+    
+    if resposta == 'não' {
+        atualizar_status(123, 'concluido');
+    }
+}
+
+pedido = consultar_pedido(123);
+print(pedido);

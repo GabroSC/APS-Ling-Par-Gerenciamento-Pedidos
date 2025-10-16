@@ -102,3 +102,13 @@ pedido = consultar_pedido(123);
 print(pedido);
 
 ```
+
+### Compilação e Execução
+```
+## Como compilar
+Digite "make" no terminal
+
+## Como executar
+Digite "./pedido < exemplo.ped"
+
+```
