@@ -17,7 +17,9 @@ Essa linguagem foi criada para ajudar no gerenciamento de pedidos.
                       | <loop_for>
                       | <loop_while>
                       | <deseja_adicionar_mais_itens>
-                      | <print>;
+                      | <print>
+                      | <atribuicao>
+                      | <atribuicao_aumentada>;
 
 <criar_pedido> = 'criar_pedido' '(' <id_pedido> ',' <cliente> ',' <data> ')';
 
@@ -31,6 +33,10 @@ Essa linguagem foi criada para ajudar no gerenciamento de pedidos.
 
 <print> = 'print' '(' <expressao> ')' ';' ;
 
+<atribuicao> = <variavel> '=' <expressao> ';';
+
+<atribuicao_aumentada> = <variavel> '+=' <expressao> ';';
+
 <condicional> = 'if' <condicao> '{' <comando>+ '}';
 
 <loop_for> = 'for' <variavel> '=' <numero> 'to' <numero> '{' <comando>+ '}';
@@ -39,16 +45,26 @@ Essa linguagem foi criada para ajudar no gerenciamento de pedidos.
 
 <deseja_adicionar_mais_itens> = 'deseja_adicionar_mais_itens' '(' <resposta> ')';
 
-<condicao_while> = <status> '==' 'aberto';
+<condicao_while> = <expressao> <operador_logico> <expressao>;
 
 <condicao> = <expressao> <operador_comparativo> <expressao>;
 
 <operador_comparativo> = '==' | '!=' | '<' | '>' | '<=' | '>=';
 
+<operador_logico> = '&&' | '||';
+
 <expressao> = <id_pedido>
-                      | <quantidade>
-                      | <status>
-                      | <valor>;
+            | <quantidade>
+            | <status>
+            | <resposta>
+            | <valor>
+            | <expressao> '+' <expressao>
+            | <expressao> '-' <expressao>
+            | <expressao> '*' <expressao>
+            | <expressao> '/' <expressao>
+            | '(' <expressao> ')'
+            | 'consultar_pedido' '(' <expressao> [',' <expressao>] ')'
+            | <variavel>;
 
 <resposta> = 'sim' | 'não';
 
@@ -60,15 +76,13 @@ Essa linguagem foi criada para ajudar no gerenciamento de pedidos.
 
 <cliente> = <letra> { <letra> | <digito> }*;
 
-<data> = <digito> <digito> <digito> '-' <digito> <digito> '-' <digito> <digito>;
+<data> = <digito> <digito> <digito> <digito> '-' <digito> <digito> '-' <digito> <digito>;
 
 <status> = 'aberto' | 'concluido' | 'cancelado';
 
 <quantidade> = <digito> { <digito> }*;
 
-<campo> = 'cliente' | 'status' | 'itens' | 'data_criacao';  // Campos disponíveis para consulta
-
-<criterio> = 'cliente' | 'status' | 'data';
+<campo> = 'cliente' | 'status' | 'itens' | 'data_criacao';
 
 <valor> = <letra> { <letra> | <digito> }*;
 
@@ -84,22 +98,27 @@ Essa linguagem foi criada para ajudar no gerenciamento de pedidos.
 criar_pedido(123, 'João Silva', '2025-09-18');
 
 adicionar_item(123, 'item001', 3);
-
 adicionar_item(123, 'item002', 2);
 
-while consultar_pedido(123, "status") == 'aberto' {
+PRINT("Iniciando loop while...");
 
+cond = 0;
+
+WHILE consultar_pedido(123, "status") == 'aberto' && cond < 4 {
+    cond += 1;
     adicionar_item(123, 'item003', 1);
-    
-    resposta = deseja_adicionar_mais_itens('sim');
-    
-    if resposta == 'não' {
+
+    DESEJA_ADICIONAR('não');
+
+    resposta = 'sim';
+
+    IF resposta == 'não' {
         atualizar_status(123, 'concluido');
     }
 }
 
 pedido = consultar_pedido(123);
-print(pedido);
+PRINT(pedido);
 
 ```
 
@@ -110,5 +129,8 @@ Digite "make" no terminal
 
 ## Como executar
 Digite "./pedido < exemplo.ped"
+
+## Como limpar
+Digite "make clean"
 
 ```

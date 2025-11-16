@@ -1,19 +1,23 @@
-criar_pedido(123, 'João Silva', '2025-09-18');
+CRIAR_PEDIDO(123, "João Silva", "2025-09-18");
+ADICIONAR_ITEM(123, "item001", 3);
+ADICIONAR_ITEM(123, "item002", 2);
 
-adicionar_item(123, 'item001', 3);
+PRINT("Iniciando loop while...");
 
-adicionar_item(123, 'item002', 2);
+cond = 0;
 
-while consultar_pedido(123, "status") == 'aberto' {
+WHILE CONSULTAR_P(123, "status") == "aberto" &&  cond < 3{
+    cond += 1;
+    ADICIONAR_ITEM(123, "item003", 1);
 
-    adicionar_item(123, 'item003', 1);
-    
-    resposta = deseja_adicionar_mais_itens('sim');
-    
-    if resposta == 'não' {
-        atualizar_status(123, 'concluido');
+    DESEJA_ADICIONAR("não");
+
+    resposta = "não";
+
+    IF resposta == "não" {
+        ATUALIZAR_STATUS(123, "concluido");
     }
 }
 
-pedido = consultar_pedido(123);
-print(pedido);
+pedido = CONSULTAR_P(123);
+PRINT(pedido);

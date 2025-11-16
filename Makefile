@@ -1,51 +1,25 @@
-# Makefile — compila lexer+parser da linguagem "pedido"
+CC=gcc
+CFLAGS=-g -Wall
+LEXFLAGS=-Wno-unused-function
 
+OBJS = lex.yy.o parser.tab.o ast.o vm.o valor.o main.o
 
-CC     ?= gcc
-BISON  ?= bison
-FLEX   ?= flex
+all: interp
 
+interp: $(OBJS)
+	$(CC) -o interp $(OBJS) -lfl
 
-CFLAGS  ?= -Wall -Wextra -O2
+parser.tab.c parser.tab.h: parser.y
+	bison -d parser.y
 
-LDLIBS  ?= -lfl
+lex.yy.c: lexer.l parser.tab.h
+	flex lexer.l
 
+lex.yy.o: lex.yy.c
+	$(CC) $(CFLAGS) $(LEXFLAGS) -c lex.yy.c -o lex.yy.o
 
-UNAME_S := $(shell uname 2>/dev/null)
-ifeq ($(UNAME_S),Darwin)
-  LDLIBS :=
-endif
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
-all: pedido
-
-
-pedido: lex.yy.c pedido.tab.c main.c
-	$(CC) $(CFLAGS) -o $@ lex.yy.c pedido.tab.c main.c $(LDLIBS)
-
-
-pedido.tab.c pedido.tab.h: pedido.y
-	$(BISON) -Wall -Wcounterexamples -d $<
-
-
-lex.yy.c lex.yy.h: pedido.l pedido.tab.h
-	$(FLEX) $<
-
-
-run: pedido
-	@ if [ -z "$(FILE)" ]; then echo "Uso: make run FILE=exemplo.ped"; exit 1; fi
-	./pedido < "$(FILE)"
-
-
-tools:
-	@echo "CC    = $$(command -v $(CC) || echo 'NÃO ENCONTRADO')"
-	@echo "BISON = $$(command -v $(BISON) || echo 'NÃO ENCONTRADO')"
-	@echo "FLEX  = $$(command -v $(FLEX) || echo 'NÃO ENCONTRADO')"
-	@$(CC) --version | head -n1 || true
-	@$(BISON) --version | head -n1 || true
-	@$(FLEX) --version  | head -n1 || true
-
-.PHONY: all run clean veryclean tools
 clean:
-	$(RM) lex.yy.c lex.yy.h pedido.tab.c pedido.tab.h
-veryclean: clean
-	$(RM) pedido
+	rm -f *.o lex.yy.c parser.tab.c parser.tab.h interp
