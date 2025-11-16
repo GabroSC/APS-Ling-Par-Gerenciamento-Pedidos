@@ -1,0 +1,41 @@
+CRIAR_PEDIDO(101, "Alice", "2025-11-16");
+CRIAR_PEDIDO(102, "Bob", "2025-11-17");
+
+ADICIONAR_ITEM(101, "itemA", 2);
+ADICIONAR_ITEM(101, "itemB", 5);
+ADICIONAR_ITEM(102, "itemC", 1);
+
+REMOVER_ITEM(101, "itemB");
+
+PRINT("Pedidos inicializados");
+
+total_items_101 = 0;
+cond = 0;
+
+FOR i = 1 TO 3 {
+    total_items_101 += i;
+    PRINT(total_items_101);
+}
+
+WHILE CONSULTAR_P(101, "status") == "aberto" && cond < 3 {
+    cond += 1;
+    ADICIONAR_ITEM(101, "itemD", 1);
+    
+    resposta = DESEJA_ADICIONAR("sim");
+
+    IF resposta == "não" {
+        ATUALIZAR_STATUS(101, "concluido");
+    }
+
+    IF cond >= 3 {
+        ATUALIZAR_STATUS(101, "concluido");
+    }
+}
+
+ATUALIZAR_STATUS(102, "concluido");
+
+pedido_101 = CONSULTAR_P(101);
+pedido_102_status = CONSULTAR_P(102, "status");
+
+PRINT(pedido_101);
+PRINT(pedido_102_status);

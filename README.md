@@ -95,31 +95,32 @@ Essa linguagem foi criada para ajudar no gerenciamento de pedidos.
 ### Exemplo código
 
 ```
-criar_pedido(123, 'João Silva', '2025-09-18');
-
-adicionar_item(123, 'item001', 3);
-adicionar_item(123, 'item002', 2);
+CRIAR_PEDIDO(123, "João Silva", "2025-09-18");
+ADICIONAR_ITEM(123, "item001", 3);
+ADICIONAR_ITEM(123, "item002", 2);
 
 PRINT("Iniciando loop while...");
 
 cond = 0;
 
-WHILE consultar_pedido(123, "status") == 'aberto' && cond < 4 {
+WHILE CONSULTAR_P(123, "status") == "aberto" &&  cond < 3{
     cond += 1;
-    adicionar_item(123, 'item003', 1);
+    ADICIONAR_ITEM(123, "item003", 1);
 
-    DESEJA_ADICIONAR('não');
+    resposta = DESEJA_ADICIONAR('sim');
 
-    resposta = 'sim';
 
-    IF resposta == 'não' {
-        atualizar_status(123, 'concluido');
+    IF resposta == "não" {
+        ATUALIZAR_STATUS(123, "concluido");
+    }
+
+    IF cond >= 3 {
+        ATUALIZAR_STATUS(123, "concluido");
     }
 }
 
-pedido = consultar_pedido(123);
+pedido = CONSULTAR_P(123);
 PRINT(pedido);
-
 ```
 
 ### Compilação e Execução
@@ -128,7 +129,7 @@ PRINT(pedido);
 Digite "make" no terminal
 
 ## Como executar
-Digite "./pedido < exemplo.ped"
+Digite "./interp < exemplo.ped" e "./interp < exemplo2.ped"
 
 ## Como limpar
 Digite "make clean"

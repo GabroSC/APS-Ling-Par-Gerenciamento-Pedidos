@@ -10,11 +10,14 @@ WHILE CONSULTAR_P(123, "status") == "aberto" &&  cond < 3{
     cond += 1;
     ADICIONAR_ITEM(123, "item003", 1);
 
-    DESEJA_ADICIONAR("não");
+    resposta = DESEJA_ADICIONAR('sim');
 
-    resposta = "não";
 
     IF resposta == "não" {
+        ATUALIZAR_STATUS(123, "concluido");
+    }
+
+    IF cond >= 3 {
         ATUALIZAR_STATUS(123, "concluido");
     }
 }

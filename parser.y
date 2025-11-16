@@ -98,9 +98,6 @@ stmt:
                 $$ = nodo_atrib($1, sum);
             }
 
-    | DESEJA_ADICIONAR LPAREN STRING RPAREN SEMI
-            { $$ = nodo_comando(C_DESEJA_ADICIONAR, $3, NULL); }
-
     | IF expr LBRACE stmt_list RBRACE
             { $$ = nodo_if($2, $4); }
 
@@ -137,6 +134,8 @@ expr:
         { $$ = nodo_consultar_expr($3, NULL); }
     | CONSULTAR_P LPAREN expr COMMA expr RPAREN
         { $$ = nodo_consultar_expr($3, $5); }
-    ;
+
+    | DESEJA_ADICIONAR LPAREN STRING RPAREN
+        { $$ = nodo_comando(C_DESEJA_ADICIONAR, $3, NULL); }
 
 %%
