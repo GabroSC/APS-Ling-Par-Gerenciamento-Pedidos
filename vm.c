@@ -91,7 +91,20 @@ Valor vm_criar_pedido(int id, const char* cliente, const char* data) {
 
 Valor vm_adicionar_item(int id, const char* item, int quantidade) {
     Pedido *p = find_pedido(id);
-    if (!p) { printf("Pedido %d não encontrado.\n", id); return criar_valor_void(); }
+    if (!p) { 
+        printf("Pedido %d não encontrado.\n", id); 
+        return criar_valor_void(); 
+    }
+
+    // Verifica se o item já existe
+    for (int i = 0; i < p->item_count; i++) {
+        if (strcmp(p->items[i].id, item) == 0) {
+            p->items[i].q += quantidade;
+            printf("Adicionado %s x%d ao pedido %d (atualizado)\n", item, quantidade, id);
+            return criar_valor_void();
+        }
+    }
+
     if (p->item_count < 64) {
         strncpy(p->items[p->item_count].id, item ? item : "(null)", 63);
         p->items[p->item_count].id[63] = '\0';

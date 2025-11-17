@@ -22,5 +22,5 @@ WHILE CONSULTAR_P(123, "status") == "aberto" &&  cond < 3{
     }
 }
 
-pedido = CONSULTAR_P(123);
+pedido = CONSULTAR_P(123, "itens");
 PRINT(pedido);
